@@ -5,8 +5,27 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils import timezone
 # Create your models here.
+class Neighborhood(models.Model):
+    name = models.CharField(max_length=40, null=True, blank=True)
+    location=models.CharField(max_length=100, null=True, blank=True)
+    description = HTMLField()
+    photo = models.ImageField(upload_to='profpics/',default='profpics/default.jpg')
+    user = models.ForeignKey(User, null=True)
+
+    def create_neighborhood(self):
+        self.save()
+    def delete_neighborhood(self):
+        self.delete()
+    @classmethod
+    def find_neighborhood(cls,search_term):
+        hood = cls.objects.filter(name__icontains = search_term)
+    @classmethod
+    def update_neighborhood(cls,id ,name, description ,location,photo):
+        updated_neighborhood = cls.objects.filter(id = id).update(name = name, description = description ,location = location,category = category,photo=photo)
+    def __str__(self):
+        return self.name
 class Profile(models.Model):
-    bio = HTMLField(default="Noisy Neigbhors")
+    bio = HTMLField(default="majiriani wema")
     photo = models.ImageField(upload_to='profpics/',default='profpics/prof.png')
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="wewe",primary_key=True)
     neighborhood=models.ForeignKey(Neighborhood, on_delete=models.CASCADE,null=True,blank=True,related_name="members")
@@ -39,8 +58,6 @@ class Profile(models.Model):
     def get_by_id(cls, id):
         profile = Profile.objects.get(user = id)
         return profile
-
-
 class Business(models.Model):
     name=models.CharField(max_length=40, null=True, blank=True)
     propreiter=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
@@ -61,7 +78,6 @@ class Business(models.Model):
     def update_business(cls,id,name,propreiter,neighborhood,email):
         updated_business=cls.object.filter(id=id).update(name=name,propreiter=propreiter,neighborhood=neighborhood,email=email)
 
-
 class Alert(models.Model):
     alert=HTMLField()
     posted_by=models.ForeignKey(User,on_delete=models.CASCADE,null=True,blank=True)
@@ -77,7 +93,6 @@ class Alert(models.Model):
     class Meta:
         ordering = ['alert']
 
-
 class Comment(models.Model):
     comment = HTMLField(default="")
     user = models.ForeignKey(User,on_delete=models.CASCADE, null=True, blank=True)
@@ -92,24 +107,3 @@ class Comment(models.Model):
         self.delete()
     class Meta:
         ordering =['-date_posted']
-
-
-class Neighborhood(models.Model):
-    name = models.CharField(max_length=40, null=True, blank=True)
-    location=models.CharField(max_length=100, null=True, blank=True)
-    description = HTMLField()
-    photo = models.ImageField(upload_to='profpics/',default='profpics/default.jpg')
-    user = models.ForeignKey(User, null=True)
-
-    def create_neighborhood(self):
-        self.save()
-    def delete_neighborhood(self):
-        self.delete()
-    @classmethod
-    def find_neighborhood(cls,search_term):
-        hood = cls.objects.filter(name__icontains = search_term)
-    @classmethod
-    def update_neighborhood(cls,id ,name, description ,location,photo):
-        updated_neighborhood = cls.objects.filter(id = id).update(name = name, description = description ,location = location,category = category,photo=photo)
-    def __str__(self):
-        return self.name        
