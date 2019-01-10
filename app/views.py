@@ -206,3 +206,11 @@ def post_comment(request,alert_id):
 #     Posts.objects.filter(pk=postId).delete()
 #     messages.error(request, 'Succesfully Deleted a Post')
 #     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+# @login_required(login_url='/accounts/login/')
+# def delete_hood(request, id):
+#
+#     Hood.objects.filter(user=request.user, pk=id).delete()
+#     messages.error(request, 'Succesfully deleted your hood')
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+#
