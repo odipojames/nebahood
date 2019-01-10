@@ -1,0 +1,106 @@
+{%extends 'base.html'%} {% load static %} {% load bootstrap4 %} {% block content %}
+
+
+<style>
+.flash-button{
+	/* background:#07A3B4; */
+  background:black;
+	color:#fff;
+	border:none;
+	animation-name: flash;
+	animation-duration: 1s;
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	//Firefox 1+
+	-webkit-animation-name: flash;
+	-webkit-animation-duration: 1s;
+	-webkit-animation-timing-function: linear;
+	-webkit-animation-iteration-count: infinite;
+	//Safari 3-4
+	-moz-animation-name: flash;
+	-moz-animation-duration: 1s;
+	-moz-animation-timing-function: linear;
+	-moz-animation-iteration-count: infinite;
+}
+@keyframes flash {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+//Firefox 1+
+@-webkit-keyframes flash {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+//Safari 3-4
+@-moz-keyframes flash {
+    0% { opacity: 1.0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1.0; }
+}
+</style>
+<div class="container" style="margin-top:140px;">
+  <div class="row">
+    <div class="col-md-4"></div>
+    {% if messages %}
+
+        {% for message in messages %}
+          <div class="message alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          {{ message }}</div>
+
+        {% endfor %}
+
+    {% endif %}
+    <div class="col-md-4"></div>
+
+  </div>
+  <div class="row">
+
+
+    <div class="col-md-4"></div>
+
+  <h3> <a href="{%url 'current_hood'%}" class="btn btn-info btn-outline flash-button" style="margin-right:10px;">My Hood</a></h3>
+<h3>
+  <a href="{% url 'add_neighborhood'%}" class="btn btn-info btn-outline" style="">Create Hood</a>
+
+</h3>
+
+
+    <div class="col-md-4"></div>
+  </div>
+  <div class="row">
+{% for hood in nhoods%}
+<div class="col-md-5 col-xs-12 col-sm-12 col-lg-6">
+  <div class="card" style="height:360px;width:400px;;margin:30px;">
+    <div class="card-body">
+          <div class="img-cont">
+            <img class="card-img-top img-responsive i-images" src="{{hood.photo.url}}" style="height:160px;">
+            <div class="overlay">
+            <div class="text">{{hood.name}}</div>
+            {% autoescape off %}
+
+            <!-- <div class="text">{{hood.description}}</div> -->
+            {% endautoescape %}
+            <div class="text">Members : {{hood.members.count}}</div>
+<br>
+            <a href="{% url 'join_hood' id=hood.id%}" class="btn btn-info btn-block">Join Hood</a>
+
+            <!-- <a href="{% url 'exit_hood' id=hood.id%}" class="btn btn-danger btn-block">Exit Hood</a> -->
+
+  </div>
+          </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+{% endfor %}
+  </div>
+</div>
+
+
+{% endblock %}
