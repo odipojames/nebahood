@@ -201,3 +201,8 @@ def post_comment(request,alert_id):
     else:
         form = CommentForm()
     return render(request, 'single_post.html', {"user":current_user,"alerts":alerts,"comments":comments,"form":form})
+
+# def delete_post(request, postId):
+#     Posts.objects.filter(pk=postId).delete()
+#     messages.error(request, 'Succesfully Deleted a Post')
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
