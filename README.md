@@ -35,7 +35,7 @@ This application allows the users to enter into different residences then when t
 
 Live link
 
-you can otherwise view the site by running the following url on your web browser :https://dansehood.herokuapp.com/
+you can otherwise view the site by running the following url on your web browser :https://nebahood.herokuapp.com/
 
 
 ## Technologies Used
