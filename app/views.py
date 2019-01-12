@@ -11,6 +11,9 @@ from django.core.urlresolvers import reverse
 # Create your views here.
 
 def signup(request):
+    '''
+    registration function
+    '''
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -24,6 +27,9 @@ def signup(request):
 
 @login_required(login_url='/accounts/login/')
 def index(request):
+    '''
+    function that returns the home page
+    '''
 
     message = "Hello World"
 
@@ -34,9 +40,11 @@ def index(request):
 
 @login_required(login_url='/accounts/login/')
 def profile(request, username):
+    '''
+    function that returns user profile
+    '''
     title = "Profile"
     profile = User.objects.get(username=username)
-    # comments = Comments.objects.all()
     users = User.objects.get(username=username)
     id = request.user.id
     form = ProfileForm()
@@ -46,12 +54,13 @@ def profile(request, username):
     except:
         profile_info = Profile.filter_by_id(profile.id)
 
-
-    # alerts = Project.get_profile_pic(profile.id)
     return render(request, 'registration/profile.html', {'title':title,'profile':profile,'profile_info':profile_info,"form":form})
 
 @login_required(login_url='/accounts/login/')
 def update_profile(request):
+    '''
+    function that updtates user profile
+    '''
 
     profile = User.objects.get(username=request.user)
     try :
@@ -65,7 +74,6 @@ def update_profile(request):
             update = form.save(commit=False)
             update.user = request.user
             update.save()
-            # return HttpResponseRedirect(reverse('profile', username=request.user))
             messages.success(request,"Profile Updated")
             return redirect('profile', username=request.user)
     else:
@@ -75,6 +83,9 @@ def update_profile(request):
 
 @login_required(login_url='/accounts/login')
 def new_nhood(request):
+    '''
+    function that create new neighberhood
+    '''
     current_user = request.user
     if request.method == 'POST':
         form = NeighborhoodForm(request.POST,request.FILES)
@@ -86,16 +97,22 @@ def new_nhood(request):
             return redirect('index')
     else:
             form = NeighborhoodForm()
-            # context= {"form":form}
+
     return render(request, 'new_nhood.html',{"form":form})
 
 @login_required(login_url='/accounts/login/')
 def current_hood(request):
+    '''
+    function that returns the users current neighborhood
+    '''
     return render(request, 'current_hood.html')
 
 
 @login_required(login_url='/accounts/login/')
 def join_hood(request,id):
+    '''
+    function that add member to neighborhood
+    '''
     hood = get_object_or_404(Neighborhood, pk=id)
     request.user.wewe.neighborhood = hood
     request.user.wewe.save()
@@ -104,11 +121,11 @@ def join_hood(request,id):
 
 @login_required(login_url='/accounts/login/')
 def exit_hood(request,id):
+    '''
+    function to remove a member from neighberhood
+    '''
     hood = get_object_or_404(Neighborhood, pk=id)
     if request.user.wewe.neighborhood == hood:
-        # request.user.wewe.neighborhood = Null
-        # request.user.wewe.neighborhood = False
-        # messages.success(request, "Image uploaded!")
         request.user.wewe.neighborhood = None
         request.user.wewe.save()
         messages.success(request,"Hood Exited")
@@ -116,6 +133,9 @@ def exit_hood(request,id):
 
 @login_required(login_url='/accounts/login/')
 def new_business(request):
+    '''
+    function that create business to neighberhood
+    '''
     current_user = request.user
     if request.method == 'POST':
         form = BusinessForm(request.POST,request.FILES)
@@ -129,11 +149,14 @@ def new_business(request):
             return redirect('current_hood')
     else:
         form = BusinessForm()
-        # context= {"form":form}
+
     return render(request, 'new_business.html',{"form":form})
 
 @login_required(login_url='/accounts/login/')
 def new_alert(request):
+    '''
+    function to craate a lert messages
+    '''
     current_user = request.user
     if request.method == 'POST':
         form = AlertForm(request.POST,request.FILES)
@@ -147,14 +170,14 @@ def new_alert(request):
             return redirect('current_hood')
     else:
         form = AlertForm()
-                # context= {"form":form}
+
     return render(request, 'new_alert.html',{"form":form})
 
 @login_required(login_url='/accounts/login/')
 def search_business(request):
-    # profile = Profile.get_profile()
-
-    # if 'caption' in request.GET and request.GET["caption"]:
+    '''
+    function that search business in neighberhood
+    '''
     if 'name' in request.GET and request.GET["name"]:
 
         search_term = request.GET.get("name")
@@ -168,24 +191,16 @@ def search_business(request):
 
     else:
         message = "You haven't searched for any term"
-        # context={"message":message}
         return render(request, 'search.html',{"message":message})
 
-# @login_required(login_url='/accounts/login')
-# def single_post(request,id):
-#     alert = Alert.objects.get(id = id)
-#     comments = Comment.objects.order_by('-date_posted')
-#
-#     context={"alert":alert,"comments":comments}
-#     return render(request, 'single_post.html',context)
 
 @login_required(login_url='/accounts/login/')
 def post_comment(request,alert_id):
-    # alerts = Alert.objects.get(id = alert_id)
+    '''
+    function that returns alerts of comments
+    '''
     alerts = get_object_or_404(Alert, pk=alert_id)
-
     comments = Comment.objects.order_by('-date_posted')
-    # alert = get_object_or_404(Alert, pk=alert_id)
     current_user = request.user
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -203,6 +218,10 @@ def post_comment(request,alert_id):
     return render(request, 'single_post.html', {"user":current_user,"alerts":alerts,"comments":comments,"form":form})
 
 def delete_post(request, postId):
+    '''
+    function that deletes a post
+    '''
+
     Business.objects.filter(pk=postId).delete()
     messages.error(request, 'Succesfully Deleted a Post')
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
