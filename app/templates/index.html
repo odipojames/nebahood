@@ -3,8 +3,7 @@
 
 <style>
 .flash-button{
-	/* background:#07A3B4; */
-  background:black;
+  background:blue;
 	color:#fff;
 	border:none;
 	animation-name: flash;
@@ -61,9 +60,9 @@
 
     <div class="col-md-4"></div>
 
-  <h3> <a href="{%url 'current_hood'%}" class="btn btn-info btn-outline flash-button" style="margin-right:10px;">My Hood</a></h3>
+  <h3> <a href="{%url 'current_hood'%}" class="btn btn-info btn-outline flash-button" style="margin-right:10px;" data-toggle="tooltip" data-placement="top" title="click to see your neighborhood" >My Hood</a></h3>
 <h3>
-  <a href="{% url 'add_neighborhood'%}" class="btn btn-info btn-outline" style="">Create Hood</a>
+  <a href="{% url 'add_neighborhood'%}" class="btn btn-info btn-outline" style="" data-toggle="tooltip" data-placement="top" title="click here to add neighberhood" >Create Hood</a>
 
 </h3>
 
@@ -81,13 +80,13 @@
             <div class="text">{{hood.name}}</div>
             {% autoescape off %}
 
-            <!-- <div class="text">{{hood.description}}</div> -->
+
             {% endautoescape %}
             <div class="text">Members : {{hood.members.count}}</div>
 <br>
-            <a href="{% url 'join_hood' id=hood.id%}" class="btn btn-info btn-block">Join Hood</a>
+            <a href="{% url 'join_hood' id=hood.id%}" class="btn btn-info btn-block" data-toggle="tooltip" data-placement="top" title="join this hood" >Join Hood</a>
 
-            <!-- <a href="{% url 'exit_hood' id=hood.id%}" class="btn btn-danger btn-block">Exit Hood</a> -->
+
 
   </div>
           </div>
